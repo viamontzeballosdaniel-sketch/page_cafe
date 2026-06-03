@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orígenes Café</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dark: #9A7A30;
+    --black: #0A0A0A;
+    --deep: #111111;
+    --charcoal: #1A1A1A;
+    --cream: #F5EDD8;
+    --parchment: #EFE3C5;
+    --text-light: #D4C4A0;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.5;
+  }
+
+  /* ── NAVIGATION ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+    transition: all 0.4s ease;
+  }
+
+  nav.scrolled {
+    background: rgba(10,10,10,0.98);
+    padding: 14px 60px;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    text-decoration: none;
+    transition: color 0.3s;
+    font-weight: 300;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 40%, #1A1000 0%, #0A0A0A 70%);
+  }
+
+  .hero-bg-glow {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  /* Fine decorative lines */
+  .hero-line-left, .hero-line-right {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.2), transparent);
+  }
+  .hero-line-left { left: 60px; }
+  .hero-line-right { right: 60px; }
+
+  .hero-content {
+    text-align: center;
+    z-index: 2;
+    animation: fadeUp 1.2s ease forwards;
+    padding: 0 20px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-logo-img {
+    width: 220px;
+    height: 220px;
+    object-fit: contain;
+    margin-bottom: 40px;
+    filter: drop-shadow(0 0 40px rgba(201,168,76,0.3));
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .hero-tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    font-weight: 300;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    line-height: 1.1;
+    color: var(--cream);
+    font-weight: 400;
+    margin-bottom: 28px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    max-width: 520px;
+    margin: 0 auto 48px;
+    line-height: 1.9;
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 42px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 400;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+
+  .hero-cta:hover { color: var(--black); }
+  .hero-cta:hover::before { transform: translateX(0); }
+  .hero-cta span { position: relative; z-index: 1; }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* ── DIVIDER ── */
+  .ornament {
+    text-align: center;
+    padding: 20px 0;
+    color: var(--gold);
+    font-size: 1.2rem;
+    letter-spacing: 0.8em;
+    opacity: 0.5;
+  }
+
+  /* ── SECTION BASE ── */
+  section { padding: 100px 60px; }
+
+  .section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 300;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    color: var(--cream);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 30px;
+  }
+
+  /* ── STORY SECTION ── */
+  .story {
+    background: var(--deep);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .story-text .section-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .story-text p {
+    font-size: 1.15rem;
+    line-height: 1.95;
+    color: var(--text-light);
+    font-weight: 300;
+    margin-bottom: 20px;
+  }
+
+  .story-visual {
+    position: relative;
+  }
+
+  .story-img-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+  }
+
+  .story-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: sepia(30%) brightness(0.8) contrast(1.1);
+    transition: transform 0.8s ease;
+  }
+
+  .story-img-container:hover img { transform: scale(1.05); }
+
+  .story-img-frame {
+    position: absolute;
+    inset: -10px;
+    border: 1px solid rgba(201,168,76,0.3);
+    pointer-events: none;
+  }
+
+  .story-img-frame::before, .story-img-frame::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-color: var(--gold);
+    border-style: solid;
+  }
+
+  .story-img-frame::before { top: 10px; left: 10px; border-width: 1px 0 0 1px; }
+  .story-img-frame::after { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
+
+  .story-stat {
+    position: absolute;
+    bottom: -20px;
+    right: -30px;
+    background: var(--charcoal);
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 24px 30px;
+  }
+
+  .story-stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+
+  .story-stat-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    color: var(--text-light);
+    text-transform: uppercase;
+    margin-top: 6px;
+    display: block;
+  }
+
+  /* ── PHILOSOPHY SECTION ── */
+  .philosophy {
+    background: var(--black);
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 120px 60px;
+  }
+
+  .philosophy-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.5;
+    margin-bottom: 30px;
+    position: relative;
+  }
+
+  .philosophy-quote::before {
+    content: '"';
+    position: absolute;
+    top: -30px;
+    left: -10px;
+    font-size: 8rem;
+    color: rgba(201,168,76,0.1);
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+  }
+
+  .philosophy-author {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  /* ── PROCESS SECTION ── */
+  .process-wrap {
+    background: var(--deep);
+    padding: 100px 60px;
+  }
+
+  .process-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .process-card {
+    background: var(--charcoal);
+    padding: 50px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s ease;
+  }
+
+  .process-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    transform: scaleX(0);
+    transition: transform 0.5s ease;
+  }
+
+  .process-card:hover { transform: translateY(-4px); }
+  .process-card:hover::before { transform: scaleX(1); }
+
+  .process-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    color: rgba(201,168,76,0.12);
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  .process-icon {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .process-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--cream);
+    font-weight: 400;
+    margin-bottom: 16px;
+  }
+
+  .process-card p {
+    font-size: 1rem;
+    color: var(--text-light);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  /* ── ORIGINS SECTION ── */
+  .origins-wrap {
+    padding: 100px 60px;
+    background: var(--black);
+  }
+
+  .origins-header {
+    text-align: center;
+    margin-bottom: 70px;
+  }
+
+  .origins-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .origin-card {
+    background: var(--charcoal);
+    padding: 40px 30px;
+    text-align: center;
+    transition: background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .origin-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .origin-card:hover { background: #1e1e1e; }
+  .origin-card:hover::after { opacity: 1; }
+
+  .origin-flag {
+    font-size: 2.4rem;
+    margin-bottom: 16px;
+  }
+
+  .origin-country {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+
+  .origin-region {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    color: var(--text-light);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-weight: 300;
+  }
+
+  .origin-notes {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  /* ── VALUES SECTION ── */
+  .values-wrap {
+    background: var(--deep);
+    padding: 100px 60px;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: center;
+  }
+
+  .values-text .section-title em { color: var(--gold-light); font-style: italic; }
+
+  .values-list { list-style: none; margin-top: 40px; }
+
+  .values-list li {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 22px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .values-list li:first-child { border-top: 1px solid rgba(201,168,76,0.1); }
+
+  .val-icon {
+    color: var(--gold);
+    font-size: 1.2rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .val-content h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--cream);
+    margin-bottom: 6px;
+    font-weight: 400;
+  }
+
+  .val-content p {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .values-visual {
+    position: relative;
+  }
+
+  .values-img-wrap {
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .values-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: sepia(20%) brightness(0.75);
+  }
+
+  .values-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.6) 0%, transparent 60%);
+  }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    background: var(--charcoal);
+    padding: 120px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .cta-section .section-label { justify-content: center; display: block; }
+  .cta-section .section-title { max-width: 600px; margin: 0 auto 20px; }
+
+  .cta-section p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 48px;
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-gold {
+    padding: 18px 48px;
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid var(--gold);
+  }
+
+  .btn-gold:hover {
+    background: transparent;
+    color: var(--gold);
+  }
+
+  .btn-outline {
+    padding: 18px 48px;
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--text-light);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 300;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    padding: 60px;
+    border-top: 1px solid rgba(201,168,76,0.1);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .footer-left p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: rgba(201,168,76,0.4);
+    text-transform: uppercase;
+  }
+
+  .footer-center {
+    text-align: center;
+  }
+
+  .footer-center img {
+    width: 80px;
+    opacity: 0.7;
+    filter: drop-shadow(0 0 10px rgba(201,168,76,0.2));
+  }
+
+  .footer-right {
+    text-align: right;
+  }
+
+  .footer-right a {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: rgba(201,168,76,0.4);
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-bottom: 8px;
+    transition: color 0.3s;
+  }
+
+  .footer-right a:hover { color: var(--gold); }
+
+  /* ── GOLD LINE SEPARATOR ── */
+  .gold-line {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 30px auto;
+    opacity: 0.6;
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    nav.scrolled { padding: 12px 24px; }
+    .nav-links { display: none; }
+    section { padding: 70px 24px; }
+    .story { grid-template-columns: 1fr; gap: 50px; }
+    .story-stat { right: 0; }
+    .process-grid { grid-template-columns: 1fr; }
+    .origins-grid { grid-template-columns: 1fr 1fr; }
+    .values-grid { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr; text-align: center; gap: 24px; }
+    .footer-right { text-align: center; }
+    .hero-logo-img { width: 160px; height: 160px; }
+    .hero-line-left, .hero-line-right { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .origins-grid { grid-template-columns: 1fr; }
+    .process-wrap, .origins-wrap, .values-wrap { padding: 70px 24px; }
+    .cta-section { padding: 80px 24px; }
+    footer { padding: 40px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+  <div class="nav-logo">Orígenes Café</div>
+  <ul class="nav-links">
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#proceso">Proceso</a></li>
+    <li><a href="#origenes">Orígenes</a></li>
+    <li><a href="#valores">Valores</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-line-left"></div>
+  <div class="hero-line-right"></div>
+
+  <div class="hero-content">
+    <img class="hero-logo-img" src="cafe_logo.png">
+    <p class="hero-tagline">Desde el origen · Hasta tu taza</p>
+    <h1 class="hero-title">El alma del café<br><em>en cada sorbo</em></h1>
+    <p class="hero-desc">Granos de origen seleccionados, tostados con propósito.<br>Una celebración del recorrido del café.</p>
+    <a href="#historia" class="hero-cta">
+      <span>Descubre nuestra historia</span>
+    </a>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STORY -->
+<div id="historia" style="background: var(--deep); padding: 100px 60px;">
+  <div class="story reveal">
+    <div class="story-text">
+      <p class="section-label">Nuestra Historia</p>
+      <h2 class="section-title">Pasión que nace<br><em>del origen mismo</em></h2>
+      <p>Orígenes Café nace de la pasión por el café y del deseo de compartir su esencia y su historia en cada taza. Creemos que detrás de cada grano existe un territorio, una cultura y un productor que merece ser reconocido.</p>
+      <p>Seleccionamos cuidadosamente granos de origen provenientes de distintas regiones, trabajando de la mano con productores comprometidos con el cuidado de la tierra y la calidad de cada cosecha.</p>
+      <p>Tostamos cada lote con propósito y dedicación, resaltando las características únicas, aromas y sabores que hacen especial a cada origen.</p>
+    </div>
+    <div class="story-visual">
+      <div class="story-img-container">
+        <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&auto=format&fit=crop" alt="Granos de café de origen">
+        <div class="story-img-frame"></div>
+      </div>
+      <div class="story-stat">
+        <span class="story-stat-number">100%</span>
+        <span class="story-stat-label">Granos de Origen</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUOTE -->
+<div class="philosophy">
+  <div class="reveal">
+    <blockquote class="philosophy-quote">
+      Más que una cafetería, somos un espacio donde se celebra el recorrido del café, desde su cultivo hasta el momento de disfrutarlo.
+    </blockquote>
+    <div class="gold-line"></div>
+    <p class="philosophy-author">Orígenes Café · Nuestra Filosofía</p>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<div id="proceso" class="process-wrap">
+  <div class="process-header reveal">
+    <p class="section-label">Nuestro Proceso</p>
+    <h2 class="section-title">Del campo a tu taza</h2>
+    <div class="gold-line"></div>
+  </div>
+
+  <div class="process-grid">
+    <div class="process-card reveal">
+      <div class="process-number">01</div>
+      <div class="process-icon"></div>
+      <h3>Selección de Origen</h3>
+      <p>Visitamos personalmente las fincas productoras para seleccionar los mejores granos, trabajando con agricultores comprometidos con la sostenibilidad y la calidad.</p>
+    </div>
+    <div class="process-card reveal">
+      <div class="process-number">02</div>
+      <div class="process-icon"></div>
+      <h3>Tostado Artesanal</h3>
+      <p>Cada lote se tuesta con propósito y dedicación, ajustando tiempo y temperatura para resaltar las características únicas de cada variedad y origen.</p>
+    </div>
+    <div class="process-card reveal">
+      <div class="process-number">03</div>
+      <div class="process-icon"></div>
+      <h3>Experiencia en Taza</h3>
+      <p>El resultado es un café que cuenta una historia: aromas complejos, sabores distintivos y una experiencia sensorial que conecta con el lugar de donde proviene.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ORIGINS -->
+<div id="origenes" class="origins-wrap">
+  <div class="origins-header reveal">
+    <p class="section-label">Nuestros Orígenes</p>
+    <h2 class="section-title">Regiones que inspiran</h2>
+    <div class="gold-line"></div>
+    <p style="color: var(--text-light); font-style: italic; font-size: 1.05rem; max-width: 500px; margin: 0 auto;">Cada región imprime en el grano su carácter único, su terroir, su historia.</p>
+  </div>
+
+  <div class="origins-grid">
+    <div class="origin-card reveal">
+      <div class="origin-flag">🇨🇴</div>
+      <div class="origin-country">Colombia</div>
+      <div class="origin-region">Huila · Nariño</div>
+      <p class="origin-notes">Caramelo suave, frutas rojas y acidez brillante. El clásico latinoamericano.</p>
+    </div>
+    <div class="origin-card reveal">
+      <div class="origin-flag">🇪🇹</div>
+      <div class="origin-country">Etiopía</div>
+      <div class="origin-region">Yirgacheffe · Sidamo</div>
+      <p class="origin-notes">Jazmín, bergamota y arándanos. Cuna del café, complejidad sin igual.</p>
+    </div>
+    <div class="origin-card reveal">
+      <div class="origin-flag">🇬🇹</div>
+      <div class="origin-country">Guatemala</div>
+      <div class="origin-region">Antigua · Huehuetenango</div>
+      <p class="origin-notes">Chocolate oscuro, especias y cuerpo intenso. Volcánico y profundo.</p>
+    </div>
+    <div class="origin-card reveal">
+      <div class="origin-flag">🇧🇴</div>
+      <div class="origin-country">Bolivia</div>
+      <div class="origin-region">Yungas · Caranavi</div>
+      <p class="origin-notes">Miel, cítricos y suave acidez. Tesoro oculto de los Andes.</p>
+    </div>
+  </div>
+</div>
+
+<!-- VALUES -->
+<div id="valores" class="values-wrap">
+  <div class="values-grid">
+    <div class="values-text reveal">
+      <p class="section-label">Lo que nos define</p>
+      <h2 class="section-title">Compromiso con<br><em>la tierra y el café</em></h2>
+      <ul class="values-list">
+        <li>
+          <span class="val-icon">◆</span>
+          <div class="val-content">
+            <h4>Trazabilidad Total</h4>
+            <p>Conocemos el nombre del productor, la altitud de la finca y el método de procesamiento de cada grano que tostamos.</p>
+          </div>
+        </li>
+        <li>
+          <span class="val-icon">◆</span>
+          <div class="val-content">
+            <h4>Comercio Justo</h4>
+            <p>Pagamos precios justos que reconocen el trabajo y la dedicación de los caficultores que cuidan la tierra.</p>
+          </div>
+        </li>
+        <li>
+          <span class="val-icon">◆</span>
+          <div class="val-content">
+            <h4>Tostado con Propósito</h4>
+            <p>Cada perfil de tueste busca honrar las cualidades intrínsecas del grano, nunca ocultarlas.</p>
+          </div>
+        </li>
+        <li>
+          <span class="val-icon">◆</span>
+          <div class="val-content">
+            <h4>Educación del Paladar</h4>
+            <p>Compartimos el conocimiento y la historia del café para crear una comunidad consciente y apasionada.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="values-visual reveal">
+      <div class="values-img-wrap">
+        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&auto=format&fit=crop" alt="Arte de café">
+        <div class="values-overlay"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div id="contacto" class="cta-section">
+  <div class="reveal">
+    <p class="section-label">Visítanos</p>
+    <h2 class="section-title">Ven a vivir<br>la experiencia Orígenes</h2>
+    <p>Un espacio diseñado para los que aprecian la diferencia entre un buen café y un café extraordinario.</p>
+    <div class="cta-buttons">
+      <a href="https://maps.app.goo.gl/WtA8boUnfXW5kwoh6" class="btn-gold">Nuestra Cafetería</a>
+      <a href="https://wa.me/59179417426" class="btn-outline">Comprar Café</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <p>© 2025 Orígenes Café</p>
+    <p style="margin-top: 6px;">Todos los derechos reservados</p>
+  </div>
+  <div class="footer-center">
+    <img src="cafe_logo.png">
+  </div>
+  <div class="footer-right">
+    <a href="https://maps.app.goo.gl/WtA8boUnfXW5kwoh6">Ubicación</a>
+    <a href="https://www.facebook.com/people/Origenes-Cafeteria/61588928966709/">Facebook</a>
+    <a href="https://wa.me/59179417426">WhatsApp</a>
+  </div>
+</footer>
+
+<script>
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 80) navbar.classList.add('scrolled');
+  else navbar.classList.remove('scrolled');
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
